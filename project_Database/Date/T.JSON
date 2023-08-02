@@ -1,0 +1,50 @@
+{
+    'students': 
+    {
+        'name': 'students', 
+        'filed_column': 
+        [
+            {'name': 'id', 'type': 'INT'
+            },
+            {'name': 'name', 'type': 'TEXT'
+            },
+            {'name': 'age', 'type': 'INT'
+            },
+            {'name': 'gender', 'type': 'TEXT'
+            },
+            {'name': 'Id', 'type': 'INT'
+            }
+        ], 
+        'filed_row': 
+        [
+            {'id': 3, 'name': 'Charlie', 'age': 21, 'gender': 'male', 'Id': 0
+            },
+            {'id': 4, 'name': 'David', 'age': 23, 'gender': 'male', 'Id': 1
+            }
+        ]
+    }
+}
+{'filed_column': [
+        {'name': 'name', 'type': <FiledType.TEXT: 'TEXT'>
+        },
+        {'name': 'Id', 'type': <FiledType.INT: 'INT'>
+        },
+        {'name': 'age', 'type': <FiledType.INT: 'INT'>
+        }
+    ],
+ 'filed_row': [
+        {'name': 'Charlie'
+        },
+        {'name': 'David'
+        },
+        {'Id': 0
+        },
+        {'Id': 1
+        },
+        {'age': 21
+        },
+        {'age': 23
+        }
+    ],
+ 'name': 'students'
+}

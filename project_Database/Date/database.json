@@ -1,0 +1,1 @@
+{"students": {"name": "students", "filed_column": [{"name": "id", "type": "INT"}, {"name": "name", "type": "TEXT"}, {"name": "age", "type": "INT"}, {"name": "gender", "type": "TEXT"}, {"name": "Id", "type": "INT"}], "filed_row": [{"id": 3, "name": "Charlie", "age": 21, "gender": "male", "Id": 0}, {"id": 4, "name": "David", "age": 23, "gender": "male", "Id": 1}]}}

@@ -1,0 +1,107 @@
+1.数据库
+    本质上是一堆文件，里面的数据按照一定格式储存
+
+
+
+
+2.数据库表是什么    
+    数据库中最基本的单位
+    表有行（row）和列（column）：
+        行：被称为数据/记录
+        列：被称为字段
+                    Eg：
+                            姓名    性别     年龄   ----->  行（数据）
+                            张三      男      25
+                            李四      男      55
+                            王五      女      95
+                            ^
+                            |
+                            列（姓名字段）
+            字段的特性：
+                字段名，数据类型（字符串，数字，日期等），约束（Eg：不能重复，不能使用一些违规的东西）等属性
+                    
+
+
+
+
+3.SQL相关语句
+    SQL的语法：
+        SQL不区分大小写
+        多条SQL语句必须以分号（：）分开
+        处理 SQL 语句时，所有空格都被忽略。SQL 语句可以写成一行，也可以分写为多行。
+        SQL支持三种注释：
+    增(完成)：
+        插入完整的行： 
+                        INSERT INTO user
+                        VALUES (10, 'root', 'root', 'xxxx@163.com');
+        插入行的一部分：
+                        INSERT INTO user(username, password, email)
+                        VALUES ('admin', 'admin', 'xxxx@163.com');
+    ！！！所有的查找功能都用名称
+    删(完成)：
+        (只需要名字来删除)
+        删除表中的指定数据：
+                        DELETE FROM user
+                        WHERE username = 'robot';
+    查：
+        （结果存在一个新的结果表里面）
+        （字段可以使用数学表达式）
+        查询特定的字段(完成)：
+                        SELECT column1, column2, ...
+                        FROM table_name;
+        查询表中所有的结果(完成)：
+                        SELECT * FROM table_name;
+        查询满足条件的记录：
+                        SELECT column1, column2, ...
+                        FROM table_name
+                        WHERE condition;
+            and（python里的and） & or（python里的or）：多条件判定
+    改(完成)：
+                        UPDATE table_name
+                        SET column1 = value1, column2 = value2, ...
+                        WHERE condition;（商品名）
+    排序：
+        (ASC：表示按升序排序。DESC：表示按降序排序。)
+        关键字用于对结果集按照一个列或者多个列进行排序:
+                        SELECT column1, column2, ...
+                        FROM table_name
+                        ORDER BY column1, column2, ... ASC|DESC;   
+
+
+
+
+4.主键（Primary Key）
+    一个表只能有一个主键
+    创建时单主键设置：
+                        Primary Key（column）
+    创建时多条件主键设置：
+                        CONSTRAINT pk_PersonID PRIMARY Key（column1，column2……）
+    修改时创建单主键：
+                        ALTER TABLE table_name
+                        ADD PRIMARY KEY (column)
+    修改时创建多条件主键：
+                        ALTER TABLE table_name
+                        ADD CONSTRAINT pk_PersonID PRIMARY KEY (column1，column2……)
+    撤销主键：
+                        ALTER TABLE table_name
+                        DROP PRIMARY KEY
+
+5.Socket
+    
+
+6.表的创建
+                        CREATE TABLE table_name
+                        (
+                        column_name1 data_type(size),
+                        column_name2 data_type(size),
+                        column_name3 data_type(size),
+                        ....
+                        );
+
+
+
+{
+    driver: 处理数据，保存数据
+    中间件： 解析sql, 调用driver接口获取数据，发送给前端
+    前端： soket通信，接受请求，发送结果
+}
