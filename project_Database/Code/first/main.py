@@ -1,7 +1,9 @@
 import json
 import os
+import pickle
 import pprint
 import re
+import socket
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -111,6 +113,45 @@ Table_dict: dict[str, Table_struct] = {}
 """建立字典，运用字典的key对应表的name找到表所对应的Table_struct"""
 
 
+"""""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
+
+
+"""socket部分"""
+
+
+def send_data(data: dict) -> None:
+    """192.168.31.60"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    receiver_ip = "192.168.31.60"
+    receiver_port = 12345
+    s.connect((receiver_ip, receiver_port))
+    data_bytes = pickle.dumps(data)
+    s.sendall(data_bytes)
+    s.close()
+
+
+def accept_data():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    receiver_ip = "192.168.31.60"
+    receiver_port = 12345
+    s.bind((receiver_ip, receiver_port))
+    s.listen(10)
+    connection, address = s.accept()
+    data_bytes = b""
+    while True:
+        chunk = connection.recv(4096)
+        if not chunk:
+            break
+        data_bytes += chunk
+    data = pickle.loads(data_bytes)
+    print(data)
+    connection.close()
+    s.close()
+
+
+"""""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
+
+
 """
 operate部分
 """
@@ -180,6 +221,7 @@ def Fin_all(table_name: str):
     if table_name in Table_dict:
         table_data = {}
         table_data = Table_dict[table_name].json()
+        print(table_data)
     else:
         print("Wrong operate!!")
 
@@ -418,7 +460,7 @@ def extraction() -> None:
 """加数据部分"""
 
 
-def SQL_add(SQL: str):
+def SQL_add(SQL: str) -> None:
     pattern = r"INSERT INTO\s+(\w+)\s+VALUES\s+\((.*)\)"
     match = re.search(pattern, SQL, re.IGNORECASE)
     if match:
@@ -442,7 +484,7 @@ def SQL_add(SQL: str):
 """删数据部分"""
 
 
-def SQL_delete(SQL: str):
+def SQL_delete(SQL: str) -> None:
     pattern = r"DELETE\s+FROM\s+(\w+)\s+WHERE\s+(.*)"
     match = re.search(pattern, SQL, re.IGNORECASE)
     if match:
@@ -488,21 +530,21 @@ def SQL_sekect_and_part(SQL: str):
 """分治"""
 
 
-def SQL_sekect_or(SQL: str):
+def SQL_sekect_or(SQL: str) -> None:
     if "*" in SQL:
         SQL_sekect_or_all(SQL)
     else:
         SQL_sekect_or_part(SQL)
 
 
-def SQL_sekect_and(SQL: str):
+def SQL_sekect_and(SQL: str) -> None:
     if "*" in SQL:
         SQL_sekect_and_all(SQL)
     else:
         SQL_sekect_and_part(SQL)
 
 
-def SQL_sekect(SQL: str):
+def SQL_sekect(SQL: str) -> None:
     if "or" in SQL:
         SQL_sekect_or(SQL)
     elif "and" in SQL:
@@ -519,7 +561,7 @@ def SQL_sekect(SQL: str):
 """改数据部分"""
 
 
-def SQL_updata(SQL: str):
+def SQL_updata(SQL: str) -> None:
     pattern = r"UPDATE\s+(\w+)\s+SET\s+((?:\w+\s*=\s*(?:\w+|'.*?')(?:,\s*\w+\s*=\s*(?:\w+|'.*?'))*))\s+WHERE\s+(.*)"
     match = re.search(pattern, SQL, re.IGNORECASE)
     if match:
@@ -546,7 +588,7 @@ def SQL_updata(SQL: str):
 """排序部分"""
 
 
-def SQL_sort(SQL: str):
+def SQL_sort(SQL: str) -> None:
     pattern_columns = r"SELECT\s(.*?)\sFROM"
     pattern_order_by = r"ORDER BY\s(.*?)\s(ASC|DESC)"
     pattern_table_name = r"FROM\s+(\w+)\s"
@@ -567,7 +609,7 @@ def SQL_sort(SQL: str):
 """分析SQL语句"""
 
 
-def analysis(SQL: str):
+def analysis(SQL: str) -> None:
     sql = SQL.upper()
     if "INSERT INTO" in sql:
         SQL_add(SQL)
@@ -629,5 +671,3 @@ add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
 down()
 
 extraction()
-Input_SQL()
-down()
