@@ -8,29 +8,16 @@ add_table(
     ],
 )
 
-add_row("students", {"id": 1, "name": "Alice", "age": 20, "gender": "female"})
+add_row("students", {"id": 1, "name": "Alice", "age": 10, "gender": "female"})
 add_row(
     "students",
-    {"id": 3, "name": "Charlie", "age": 21, "gender": "male"},
+    {"id": 3, "name": "Charlie", "age": 28, "gender": "male"},
 )
 
 add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
 
-update(
-    "students",
-    "name",
-    FiledType.TEXT,
-    [{"id": 1, "name": "Bob"}, {"id": 2, "name": "Charlie"}],
-)
-
-delete("students", "age", FiledType.INT, 20)
-
 down()
+
 extraction()
-
-print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-
-Fin_part(
-    "students",
-    ["name", "Id", "age"],
-)
+Input_SQL()
+down()

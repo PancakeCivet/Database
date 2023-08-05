@@ -120,9 +120,8 @@ Table_dict: dict[str, Table_struct] = {}
 
 
 def send_data(data: dict) -> None:
-    """192.168.31.60"""
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    receiver_ip = "192.168.31.60"
+    receiver_ip = "127.0.0.1"
     receiver_port = 12345
     s.connect((receiver_ip, receiver_port))
     data_bytes = pickle.dumps(data)
@@ -130,21 +129,21 @@ def send_data(data: dict) -> None:
     s.close()
 
 
-def accept_data():
+def accept_data() -> dict:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    receiver_ip = "192.168.31.60"
+    receiver_ip = "127.0.0.1"
     receiver_port = 12345
     s.bind((receiver_ip, receiver_port))
     s.listen(10)
     connection, address = s.accept()
     data_bytes = b""
     while True:
-        chunk = connection.recv(4096)
+        chunk = connection.recv(200)
         if not chunk:
             break
         data_bytes += chunk
     data = pickle.loads(data_bytes)
-    print(data)
+    return data
     connection.close()
     s.close()
 
@@ -501,7 +500,7 @@ def SQL_delete(SQL: str) -> None:
 
 
 def SQL_sekect_all(SQL: str):
-    pass
+    pattern = r""
 
 
 def SQL_sekect_or_all(SQL: str):
