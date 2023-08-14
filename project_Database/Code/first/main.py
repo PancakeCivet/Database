@@ -501,23 +501,37 @@ def SQL_delete(SQL: str) -> None:
 
 
 def SQL_sekect_all(SQL: str):
-    pattern = r""
-
-
-def SQL_sekect_or_all(SQL: str):
-    pass
-
-
-def SQL_sekect_and_all(SQL: str):
-    pass
+    pattern = r"SELECT\s+\*\s+FROM\s+(\w+)"
+    match = re.match(pattern, SQL, re.IGNORECASE)
+    if match:
+        table_name = match.group(1)
+        Fin_all(table_name)
 
 
 def SQL_sekect_part(SQL: str):
-    pass
+    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)"
+    match = re.match(pattern, SQL, re.IGNORECASE)
+    if match:
+        table_name = match.group(2)
+        conditions = [value.strip() for value in match.group(1).split(",")]
+        Fin_part(table_name, conditions)
 
 
 def SQL_sekect_or_part(SQL: str):
-    pass
+    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+);$"
+    match = re.match(pattern, SQL, re.IGNORECASE)
+    if match:
+        table_name = match.group(2)
+        columns = [value.strip() for value in match.group(1).split(",")]
+        conditinos = match.group(3)
+        print(table_name)
+        print(columns)
+        print(conditinos)
+    pattern = r"WHERE\s+(.+);$"
+    match = re.search(pattern, SQL)
+    if match:
+        conditions = match.group(1)
+        print("Conditions:", conditions)
 
 
 def SQL_sekect_and_part(SQL: str):
@@ -530,27 +544,13 @@ def SQL_sekect_and_part(SQL: str):
 """分治"""
 
 
-def SQL_sekect_or(SQL: str) -> None:
-    if "*" in SQL:
-        SQL_sekect_or_all(SQL)
-    else:
-        SQL_sekect_or_part(SQL)
-
-
-def SQL_sekect_and(SQL: str) -> None:
-    if "*" in SQL:
-        SQL_sekect_and_all(SQL)
-    else:
-        SQL_sekect_and_part(SQL)
-
-
 def SQL_sekect(SQL: str) -> None:
-    if "or" in SQL:
-        SQL_sekect_or(SQL)
-    elif "and" in SQL:
-        SQL_sekect_and(SQL)
-    elif "*" in SQL:
+    if "*" in SQL:
         SQL_sekect_all(SQL)
+    elif "or" in SQL:
+        SQL_sekect_or_part(SQL)
+    elif "and" in SQL:
+        SQL_sekect_and_part(SQL)
     else:
         SQL_sekect_part(SQL)
 
