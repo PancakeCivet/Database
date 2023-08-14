@@ -4,6 +4,7 @@ import pickle
 import pprint
 import re
 import socket
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -164,12 +165,12 @@ operate部分
 def Judge(item: str) -> FiledType:
     if ("false" in item) or ("true" in item):
         return FiledType.BOOLEAN
-    elif "-" in item:
-        return FiledType.DATE
-    elif "." in item:
-        return FiledType.FLOAT
     elif item.isdigit():
         return FiledType.INT
+    elif item.replace(".", "", 1).isdigit():
+        return FiledType.FLOAT
+    elif (item.replace("-", "", 1)).replace("-", "", 1).isdigit():
+        return FiledType.DATE
     else:
         return FiledType.TEXT
 
@@ -578,7 +579,14 @@ def SQL_updata(SQL: str) -> None:
             key = key.strip("' ")
             value = value.strip("' ")
             Updata.append({key: value})
-        update(table_name, conditions[0], Judge(conditions[1]), conditions[1], Updata)
+        print(Judge(conditions[1]))
+        update(
+            table_name,
+            conditions[0],
+            Judge(conditions[1]),
+            conditions[1],
+            Updata,
+        )
 
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
@@ -670,3 +678,27 @@ add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
 down()
 
 extraction()
+
+add_table(
+    "students",
+    [
+        Filed("id", FiledType.INT),
+        Filed("name", FiledType.TEXT),
+        Filed("age", FiledType.INT),
+        Filed("gender", FiledType.TEXT),
+    ],
+)
+
+add_row("students", {"id": 1, "name": "Alice", "age": 10, "gender": "female"})
+add_row(
+    "students",
+    {"id": 3, "name": "Charlie", "age": 28, "gender": "male"},
+)
+
+add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
+
+down()
+
+extraction()
+Input_SQL()
+down()
