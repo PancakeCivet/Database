@@ -251,7 +251,9 @@ def Fin_part(table_name: str, column_name: list[str]):
 """查满足条件的"""
 
 
-def Fin_condition(table_name: str, column_name: list[str], condition: dict[str, Any]):
+def Fin_condition(
+    table_name: str, column_name: list[str], condition: dict[str, Any]
+) -> None:
     if table_name in Table_dict:
         table_data = Table_struct()
         table_temp = {}
@@ -276,7 +278,7 @@ def Fin_condition_and(
     table_name: str,
     column_name: list[str],
     conditions: list[dict[str, Any]],
-):
+) -> None:
     """condition_names中key与value相同"""
     if table_name in Table_dict:
         table_data = Table_struct()
@@ -310,7 +312,7 @@ def Fin_condition_or(
     table_name: str,
     column_name: list[str],
     conditions: list[dict[str, Any]],
-):
+) -> None:
     """condition_names中key与value相同"""
     if table_name in Table_dict:
         table_data = Table_struct()
@@ -521,7 +523,7 @@ def SQL_delete(SQL: str) -> None:
 """查数据部分"""
 
 
-def SQL_sekect_all(SQL: str):
+def SQL_sekect_all(SQL: str) -> None:
     pattern = r"SELECT\s+\*\s+FROM\s+(\w+)"
     match = re.match(pattern, SQL, re.IGNORECASE)
     if match:
@@ -529,7 +531,7 @@ def SQL_sekect_all(SQL: str):
         Fin_all(table_name)
 
 
-def SQL_sekect_part(SQL: str):
+def SQL_sekect_part(SQL: str) -> None:
     pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)"
     match = re.match(pattern, SQL, re.IGNORECASE)
     if match:
@@ -538,7 +540,7 @@ def SQL_sekect_part(SQL: str):
         Fin_part(table_name, conditions)
 
 
-def SQL_sekect_or_part(SQL: str):
+def SQL_sekect_or_part(SQL: str) -> None:
     pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+);$"
     match = re.match(pattern, SQL, re.IGNORECASE)
     if match:
@@ -559,8 +561,19 @@ def SQL_sekect_and_part(SQL: str):
     pass
 
 
-def SQL_sekect_condition(SQL):
-    pass
+def SQL_sekect_condition(SQL) -> None:
+    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+)$"
+    match = re.search(pattern, SQL, re.IGNORECASE)
+    if match:
+        condition_dict = {}
+        table_name = match.group(2)
+        columns = [value.strip() for value in match.group(1).split(",")]
+        for i in range(len(columns)):
+            columns[i] = columns[i].strip("' ")
+        condition = [value.strip() for value in match.group(3).split("=")]
+        condition[1] = condition[1].strip("';")
+        condition_dict[condition[0]] = condition[1]
+        Fin_condition(table_name, columns, condition_dict)
 
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
@@ -571,20 +584,20 @@ def SQL_sekect_condition(SQL):
 
 def SQL_sekect(SQL: str) -> None:
     if "*" in SQL:
-        print("SQL_sekect_all")
+        # print("SQL_sekect_all")
         SQL_sekect_all(SQL)
     elif "where" in SQL:
         if "or" in SQL:
-            print("SQL_sekect_or_part")
+            # print("SQL_sekect_or_part")
             SQL_sekect_or_part(SQL)
         elif "and" in SQL:
-            print("SQL_sekect_and_part")
+            # print("SQL_sekect_and_part")
             SQL_sekect_and_part(SQL)
         else:
-            print("SQL_sekect_condition")
+            # print("SQL_sekect_condition")
             SQL_sekect_condition(SQL)
     else:
-        print("SQL_sekect_part")
+        # print("SQL_sekect_part")
         SQL_sekect_part(SQL)
 
 
