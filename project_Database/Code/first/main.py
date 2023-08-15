@@ -562,7 +562,24 @@ def SQL_sekect_or_part(SQL: str) -> None:
 
 
 def SQL_sekect_and_part(SQL: str):
-    pass
+    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+)$"
+    match = re.search(pattern, SQL, re.IGNORECASE)
+
+    if match:
+        condition_dict: list[dict[str, Any]] = []
+        table_name = match.group(2)
+        conditions = [value.strip() for value in match.group(3).split("and")]
+        columns = [value.strip() for value in match.group(1).split(",")]
+        for i in range(len(columns)):
+            columns[i] = columns[i].strip("' ")
+        for condition in conditions:
+            parts = condition.split("=")
+            key = parts[0].strip()
+            value = parts[1].strip()
+            key = key.strip("' ")
+            value = value.strip("' ")
+            condition_dict.append({key: value})
+        Fin_condition_and(table_name, columns, condition_dict)
 
 
 def SQL_sekect_condition(SQL) -> None:
@@ -706,51 +723,3 @@ def Input_SQL() -> None:
 
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
-
-add_table(
-    "students",
-    [
-        Filed("id", FiledType.INT),
-        Filed("name", FiledType.TEXT),
-        Filed("age", FiledType.INT),
-        Filed("gender", FiledType.TEXT),
-    ],
-)
-
-add_row("students", {"id": 1, "name": "Alice", "age": 10, "gender": "female"})
-add_row(
-    "students",
-    {"id": 3, "name": "Charlie", "age": 28, "gender": "male"},
-)
-
-add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
-
-down()
-
-extraction()
-
-add_table(
-    "students",
-    [
-        Filed("id", FiledType.INT),
-        Filed("name", FiledType.TEXT),
-        Filed("age", FiledType.INT),
-        Filed("gender", FiledType.TEXT),
-    ],
-)
-
-add_row("students", {"id": 1, "name": "Alice", "age": 10, "gender": "female"})
-add_row(
-    "students",
-    {"id": 3, "name": "Charlie", "age": 28, "gender": "male"},
-)
-
-add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
-
-Fin_condition("students", ["name", "id", "Id"], {"age": 23})
-
-
-down()
-extraction()
-Input_SQL()
-down()

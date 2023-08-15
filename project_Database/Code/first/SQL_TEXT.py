@@ -17,7 +17,7 @@ def parse_select(sql):
 
 
 # 示例SQL语句
-sql_statement = "select id,name  from students  where Id = 1 or id = 1"
+sql_statement = "select id,name  from students  where Id = 1 and id = 1"
 # sql_statement = "SELECT id,name FROM Websites WHERE country='CN' or Id = 1"
 
 # 解析SELECT部分
