@@ -268,7 +268,6 @@ def Fin_condition(table_name: str, column_name: list[str], condition: dict[str, 
                         if element == item.name:
                             table_data.filed_column.append(item)
         table_temp = table_data.json()
-        print(table_temp)
     else:
         print("Wrong operate!!")
 
@@ -560,6 +559,10 @@ def SQL_sekect_and_part(SQL: str):
     pass
 
 
+def SQL_sekect_condition(SQL):
+    pass
+
+
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
 
 
@@ -568,13 +571,20 @@ def SQL_sekect_and_part(SQL: str):
 
 def SQL_sekect(SQL: str) -> None:
     if "*" in SQL:
+        print("SQL_sekect_all")
         SQL_sekect_all(SQL)
     elif "where" in SQL:
-        if "or" in SQL :
+        if "or" in SQL:
+            print("SQL_sekect_or_part")
             SQL_sekect_or_part(SQL)
-        else "and" in SQL :
+        elif "and" in SQL:
+            print("SQL_sekect_and_part")
             SQL_sekect_and_part(SQL)
+        else:
+            print("SQL_sekect_condition")
+            SQL_sekect_condition(SQL)
     else:
+        print("SQL_sekect_part")
         SQL_sekect_part(SQL)
 
 
@@ -721,3 +731,9 @@ add_row(
 add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
 
 Fin_condition("students", ["name", "id", "Id"], {"age": 23})
+
+
+down()
+extraction()
+Input_SQL()
+down()
