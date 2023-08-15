@@ -541,20 +541,24 @@ def SQL_sekect_part(SQL: str) -> None:
 
 
 def SQL_sekect_or_part(SQL: str) -> None:
-    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+);$"
-    match = re.match(pattern, SQL, re.IGNORECASE)
+    pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)\s+WHERE\s+(.+)$"
+    match = re.search(pattern, SQL, re.IGNORECASE)
+
     if match:
+        condition_dict: list[dict[str, Any]] = []
         table_name = match.group(2)
+        conditions = [value.strip() for value in match.group(3).split("or")]
         columns = [value.strip() for value in match.group(1).split(",")]
-        conditinos = match.group(3)
-        print(table_name)
-        print(columns)
-        print(conditinos)
-    pattern = r"WHERE\s+(.+);$"
-    match = re.search(pattern, SQL)
-    if match:
-        conditions = match.group(1)
-        print("Conditions:", conditions)
+        for i in range(len(columns)):
+            columns[i] = columns[i].strip("' ")
+        for condition in conditions:
+            parts = condition.split("=")
+            key = parts[0].strip()
+            value = parts[1].strip()
+            key = key.strip("' ")
+            value = value.strip("' ")
+            condition_dict.append({key: value})
+        Fin_condition_or(table_name, columns, condition_dict)
 
 
 def SQL_sekect_and_part(SQL: str):
