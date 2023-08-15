@@ -251,6 +251,28 @@ def Fin_part(table_name: str, column_name: list[str]):
 """查满足条件的"""
 
 
+def Fin_condition(table_name: str, column_name: list[str], condition: dict[str, Any]):
+    if table_name in Table_dict:
+        table_data = Table_struct()
+        table_temp = {}
+        table_data.name = table_name
+        keys = condition.keys()
+        key_list = list(keys)
+        key_condition = key_list[0]
+        for row in Table_dict[table_name].filed_row:
+            if row[key_condition] == condition[key_condition]:
+                for element in column_name:
+                    table_data.filed_row.append({element: row[element]})
+                for element in column_name:
+                    for item in Table_dict[table_name].filed_column:
+                        if element == item.name:
+                            table_data.filed_column.append(item)
+        table_temp = table_data.json()
+        print(table_temp)
+    else:
+        print("Wrong operate!!")
+
+
 def Fin_condition_and(
     table_name: str,
     column_name: list[str],
@@ -697,8 +719,4 @@ add_row(
 
 add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
 
-down()
-
-extraction()
-Input_SQL()
-down()
+Fin_condition("students", ["name", "id", "Id"], {"age": 23})
