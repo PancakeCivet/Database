@@ -569,10 +569,11 @@ def SQL_sekect_and_part(SQL: str):
 def SQL_sekect(SQL: str) -> None:
     if "*" in SQL:
         SQL_sekect_all(SQL)
-    elif "or" in SQL:
-        SQL_sekect_or_part(SQL)
-    elif "and" in SQL:
-        SQL_sekect_and_part(SQL)
+    elif "where" in SQL:
+        if "or" in SQL :
+            SQL_sekect_or_part(SQL)
+        else "and" in SQL :
+            SQL_sekect_and_part(SQL)
     else:
         SQL_sekect_part(SQL)
 
