@@ -89,6 +89,12 @@ class Table_struct:
             self.filed_column.append(Filed(element["name"], FiledType(element["type"])))
         self.filed_row = data["filed_row"]
 
+    def loads(self, data: dict) -> None:
+        self.name = data["name"]
+        for element in data["filed_column"]:
+            self.filed_column.append(Filed(element["name"], FiledType(element["type"])))
+        self.filed_row = data["filed_row"]
+
     """将JSON格式转为类"""
 
 
@@ -125,20 +131,25 @@ def send_data() -> None:
     receiver_ip = "127.0.0.1"
     receiver_port = 12345
     s.connect((receiver_ip, receiver_port))
-    SQL = s.recv(2000000)
-    SQL_finally = pickle.loads(SQL)
-    analysis(SQL_finally)
-    data_bytes = pickle.dumps(Table_dict)
-    s.sendall(data_bytes)
+    while True:
+        SQL = s.recv(2000000)
+        SQL_finally = pickle.loads(SQL)
+        analysis(SQL_finally)
+        data_bytes = pickle.dumps(Table_dict)
+        s.sendall(data_bytes)
 
 
 def accept_data() -> None:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
     receiver_ip = "127.0.0.1"
     receiver_port = 12345
+
     s.bind((receiver_ip, receiver_port))
     s.listen(10)
+
     connection, address = s.accept()
+
     while True:
         SQL = Input_SQL()
         SQL_finally = pickle.dumps(SQL)
@@ -740,3 +751,7 @@ add_row(
 )
 
 add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
+
+
+accept_data()
+send_data()
