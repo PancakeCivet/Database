@@ -130,7 +130,6 @@ def send_data() -> None:
     analysis(SQL_finally)
     data_bytes = pickle.dumps(Table_dict)
     s.sendall(data_bytes)
-    s.close()
 
 
 def accept_data() -> None:
