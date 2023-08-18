@@ -10,8 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import main
-from main import Filed, FiledType, Table_struct
 
-Table_dict: dict[str, Table_struct] = {}
+data = {"1": "a", "2": "b", "3": "c"}
 
-print(Table_dict)
+main.send_data(data)

@@ -120,33 +120,32 @@ Table_dict: dict[str, Table_struct] = {}
 """socket部分"""
 
 
-def send_data(data: dict) -> None:
+def send_data() -> None:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     receiver_ip = "127.0.0.1"
     receiver_port = 12345
     s.connect((receiver_ip, receiver_port))
-    data_bytes = pickle.dumps(data)
+    SQL = s.recv(2000000)
+    SQL_finally = pickle.loads(SQL)
+    analysis(SQL_finally)
+    data_bytes = pickle.dumps(Table_dict)
     s.sendall(data_bytes)
     s.close()
 
 
-def accept_data() -> dict:
+def accept_data() -> None:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     receiver_ip = "127.0.0.1"
     receiver_port = 12345
     s.bind((receiver_ip, receiver_port))
     s.listen(10)
     connection, address = s.accept()
-    data_bytes = b""
     while True:
-        chunk = connection.recv(200)
-        if not chunk:
-            break
-        data_bytes += chunk
-    data = pickle.loads(data_bytes)
-    return data
-    connection.close()
-    s.close()
+        SQL = Input_SQL()
+        SQL_finally = pickle.dumps(SQL)
+        connection.send(SQL_finally)
+        chunk = connection.recv(2000000)
+        Table_dict = pickle.loads(chunk)
 
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
@@ -155,6 +154,7 @@ def accept_data() -> dict:
 """
 operate部分
 """
+
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
 
@@ -711,7 +711,7 @@ def analysis(SQL: str) -> None:
 """输入SQL语句"""
 
 
-def Input_SQL() -> None:
+def Input_SQL() -> str:
     SQL_lines = []
     while True:
         SQL_line = input()
@@ -719,7 +719,25 @@ def Input_SQL() -> None:
             break
         SQL_lines.append(SQL_line)
     SQL_final = "  ".join(SQL_lines)
-    analysis(SQL_final)
+    return SQL_final
 
 
 """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """""" """"""
+
+add_table(
+    "students",
+    [
+        Filed("id", FiledType.INT),
+        Filed("name", FiledType.TEXT),
+        Filed("age", FiledType.INT),
+        Filed("gender", FiledType.TEXT),
+    ],
+)
+
+add_row("students", {"id": 1, "name": "Alice", "age": 10, "gender": "female"})
+add_row(
+    "students",
+    {"id": 3, "name": "Charlie", "age": 28, "gender": "male"},
+)
+
+add_row("students", {"id": 4, "name": "David", "age": 23, "gender": "male"})
