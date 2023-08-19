@@ -114,12 +114,13 @@ class Database_table:
             content["Id"] = Id
             self.Table_dict[table_name].filed_row.append(content)
 
-    def Fin_all(self, table_name: str):
+    def Fin_all(self, table_name: str) -> dict:
         if table_name in self.Table_dict:
             table_data = {}
             table_data = self.Table_dict[table_name].json()
+            return table_data
 
-    def Fin_part(self, table_name: str, column_name: list[str]):
+    def Fin_part(self, table_name: str, column_name: list[str]) -> dict:
         if table_name in self.Table_dict:
             table_data = Table_struct()
             table_temp = {}
@@ -134,10 +135,11 @@ class Database_table:
                     if element == item.name:
                         table_data.filed_column.append(item)
             table_temp = table_data.json()
+            return table_temp
 
     def Fin_condition(
         self, table_name: str, column_name: list[str], condition: dict[str, Any]
-    ) -> None:
+    ) -> dict:
         if table_name in self.Table_dict:
             table_data = Table_struct()
             table_temp = {}
@@ -146,7 +148,7 @@ class Database_table:
             key_list = list(keys)
             key_condition = key_list[0]
             for row in self.Table_dict[table_name].filed_row:
-                if row[key_condition] == condition[key_condition]:
+                if str(row[key_condition]) == str(condition[key_condition]):
                     for element in column_name:
                         table_data.filed_row.append({element: row[element]})
                     for element in column_name:
@@ -154,13 +156,14 @@ class Database_table:
                             if element == item.name:
                                 table_data.filed_column.append(item)
             table_temp = table_data.json()
+            return table_temp
 
     def Fin_condition_and(
         self,
         table_name: str,
         column_name: list[str],
         conditions: list[dict[str, Any]],
-    ) -> None:
+    ) -> dict:
         """condition_names中key与value相同"""
         if table_name in self.Table_dict:
             table_data = Table_struct()
@@ -186,13 +189,14 @@ class Database_table:
                                 if element == item.name:
                                     table_data.filed_column.append(item)
             table_temp = table_data.json()
+            return table_temp
 
     def Fin_condition_or(
         self,
         table_name: str,
         column_name: list[str],
         conditions: list[dict[str, Any]],
-    ) -> None:
+    ) -> dict:
         """condition_names中key与value相同"""
         if table_name in self.Table_dict:
             table_data = Table_struct()
@@ -205,7 +209,7 @@ class Database_table:
                 for column in self.Table_dict[table_name].filed_column:
                     for condition in conditions:
                         if column.name in condition:
-                            if row[column.name] == condition[column.name]:
+                            if str(row[column.name]) == str(condition[column.name]):
                                 flag += 1
                 if flag > 0:
                     for element in column_name:
@@ -217,6 +221,7 @@ class Database_table:
                                 if element == item.name:
                                     table_data.filed_column.append(item)
             table_temp = table_data.json()
+            return table_temp
 
     def sql_sort(
         self,
@@ -282,7 +287,7 @@ class Database_table:
         if table_name in self.Table_dict:
             element = self.Table_dict[table_name]
             for row in element.filed_row:
-                if column_name in row and row[column_name] == condition:
+                if str(row[column_name]) == condition:
                     for last in self.Table_dict[table_name].filed_column:
                         if last.name == column_name and content == last.type:
                             element.filed_row.remove(row)

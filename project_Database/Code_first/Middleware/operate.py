@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from Code_first.Database.Date_base import Database_table, FiledType
+from Database.Date_base import Database_table, FiledType
 
 
 class Operator:
@@ -40,21 +40,23 @@ class Operator:
             )
 
     @classmethod
-    def SQL_sekect_all(cls, SQL: str, dat: Database_table) -> None:
+    def SQL_sekect_all(cls, SQL: str, dat: Database_table) -> dict:
         pattern = r"SELECT\s+\*\s+FROM\s+(\w+)"
         match = re.match(pattern, SQL, re.IGNORECASE)
         if match:
             table_name = match.group(1)
-            dat.Fin_all(table_name)
+            data = dat.Fin_all(table_name)
+            return data
 
     @classmethod
-    def SQL_sekect_part(cls, SQL: str, dat: Database_table) -> None:
+    def SQL_sekect_part(cls, SQL: str, dat: Database_table) -> dict:
         pattern = r"SELECT\s+(.+)\s+FROM\s+(\w+)"
         match = re.match(pattern, SQL, re.IGNORECASE)
         if match:
             table_name = match.group(2)
             conditions = [value.strip() for value in match.group(1).split(",")]
-            dat.Fin_part(table_name, conditions)
+            data = dat.Fin_part(table_name, conditions)
+            return data
 
     @classmethod
     def SQL_sekect_or_part(cls, SQL: str, dat: Database_table) -> None:
@@ -74,7 +76,8 @@ class Operator:
                 key = key.strip("' ")
                 value = value.strip("' ")
                 condition_dict.append({key: value})
-            dat.Fin_condition_or(table_name, columns, condition_dict)
+            data = dat.Fin_condition_or(table_name, columns, condition_dict)
+            return data
 
     @classmethod
     def SQL_sekect_and_part(cls, SQL: str, dat: Database_table):
@@ -95,7 +98,8 @@ class Operator:
                 key = key.strip("' ")
                 value = value.strip("' ")
                 condition_dict.append({key: value})
-            dat.Fin_condition_and(table_name, columns, condition_dict)
+            data = dat.Fin_condition_and(table_name, columns, condition_dict)
+            return data
 
     @classmethod
     def SQL_sekect_condition(cls, SQL: str, dat: Database_table) -> None:
@@ -110,21 +114,27 @@ class Operator:
             condition = [value.strip() for value in match.group(3).split("=")]
             condition[1] = condition[1].strip("';")
             condition_dict[condition[0]] = condition[1]
-            dat.Fin_condition(table_name, columns, condition_dict)
+            data = dat.Fin_condition(table_name, columns, condition_dict)
+            return data
 
     @classmethod
-    def SQL_sekect(cls, SQL: str, dat: Database_table) -> None:
+    def SQL_sekect(cls, SQL: str, dat: Database_table) -> dict:
         if "*" in SQL:
-            cls.SQL_sekect_all(SQL, dat)
+            data = cls.SQL_sekect_all(SQL, dat)
+            return data
         elif "where" in SQL:
             if "or" in SQL:
-                cls.SQL_sekect_or_part(SQL, dat)
+                data = cls.SQL_sekect_or_part(SQL, dat)
+                return data
             elif "and" in SQL:
-                cls.SQL_sekect_and_part(SQL, dat)
+                data = cls.SQL_sekect_and_part(SQL, dat)
+                return data
             else:
-                cls.SQL_sekect_condition(SQL, dat)
+                data = cls.SQL_sekect_condition(SQL, dat)
+                return data
         else:
-            cls.SQL_sekect_part(SQL, dat)
+            data = cls.SQL_sekect_part(SQL, dat)
+            return data
 
     @classmethod
     def SQL_updata(cls, SQL: str, dat: Database_table) -> None:
@@ -177,7 +187,8 @@ class Operator:
         elif "DELETE" in sql:
             cls.SQL_delete(SQL, dat)
         elif ("SELECT" in sql) and ("ORDER BY" not in sql):
-            cls.SQL_sekect(SQL, dat)
+            database_temp = cls.SQL_sekect(SQL, dat)
+            return database_temp
         elif "UPDATE" in sql:
             cls.SQL_updata(SQL, dat)
         elif ("SELECT" in sql) and ("ORDER BY" in sql):
