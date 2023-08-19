@@ -17,7 +17,5 @@ class MainClass:
 
 if __name__ == "__main__":
     text = MainClass()
-    text.table.extraction()
-    database = {}
-    database = Operator.analysis("delete from students where id = 3", text.table)
+    text.start()
     text.close()

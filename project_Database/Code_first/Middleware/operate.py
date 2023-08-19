@@ -194,7 +194,7 @@ class Operator:
         elif ("SELECT" in sql) and ("ORDER BY" in sql):
             cls.SQL_sort(SQL, dat)
         else:
-            print("Wrong operate!!")
+            print("Begain Wrong operate!!")
         database_temp = {}
         for table_name, table_struct in dat.Table_dict.items():
             database_temp[table_name] = table_struct.json()

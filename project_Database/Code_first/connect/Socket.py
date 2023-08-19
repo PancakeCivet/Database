@@ -18,9 +18,8 @@ def accept_data(database: Database_table) -> None:
     connection, address = s.accept()
     try:
         while True:
-            text = connection.recv(4096)
-            data = json.loads(text.decode())
-            result = Operator.analysis(data, database)
+            text = connection.recv(4096).decode()
+            result = Operator.analysis(text, database)
             result_text = json.dumps(result)
             connection.send(result_text.encode())
     except OSError as Ose:
