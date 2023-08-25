@@ -19,6 +19,7 @@ $(document).ready(function () {
                 data: data_json,
                 success: function (flag) {
                     if(flag  == true){
+                        window.close();
                         window.open("login.html")
                     }
                     else{

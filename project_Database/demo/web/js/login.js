@@ -17,6 +17,7 @@ $(document).ready(function () {
             data: data_json,
             success: function (type) {
                 if( type == 1 ){
+                    window.close();
                     localStorage.setItem("username", username);
                     window.open("goods.html")
                 }
