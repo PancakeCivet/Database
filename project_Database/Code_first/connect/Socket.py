@@ -4,9 +4,8 @@ import socket
 from pathlib import Path
 from typing import Any
 
-from Middleware import Operator
-
 from Database import Database_table, FiledType
+from Middleware import Operator
 
 
 def accept_data(database: Database_table) -> None:
