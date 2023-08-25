@@ -17,9 +17,13 @@ def accept_data(database: Database_table) -> None:
     s.listen(10)
     try:
         while True:
-            text = connection.recv(4096).decode()
-            result = Operator.analysis(text, database)
-            result_text = json.dumps(result)
-            connection.send(result_text.encode())
+            text = connection.recv(4096)
+            if text == b"":
+                pass
+            else:
+                text = text.decode()
+                result = Operator.analysis(text, database)
+                result_text = json.dumps(result)
+                connection.send(result_text.encode())
     except OSError as Ose:
         pass

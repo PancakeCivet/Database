@@ -12,11 +12,13 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((receiver_ip, receiver_port))
 
 # 发送数据
-str_ = "delete from students where id = 1"
+str_ = """delete from students 
+where id = 1"""
 s.sendall(str_.encode())
 
 # 接收服务器响应
 data = s.recv(1024).decode()
+print(data)
 data_dict = {}
 data_dict = json.loads(data)
 
