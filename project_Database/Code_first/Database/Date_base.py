@@ -132,7 +132,7 @@ class Database_table:
                     )
             for element in column_name:
                 for item in self.Table_dict[table_name].filed_column:
-                    if element == item.name:
+                    if element == str(item.name):
                         table_data.filed_column.append(item)
             table_temp = table_data.json()
             return table_temp

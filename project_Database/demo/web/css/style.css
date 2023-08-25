@@ -1,0 +1,46 @@
+body {
+    background-color: #f2f2f2;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-top: 50px;
+}
+
+p {
+    color: #666;
+    text-align: center;
+}
+
+.my-form {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.my-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.my-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.my-button:hover {
+    background-color: #3e8e41;
+}

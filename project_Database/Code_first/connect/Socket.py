@@ -15,7 +15,6 @@ def accept_data(database: Database_table) -> None:
     receiver_port = 12345
     s.bind((receiver_ip, receiver_port))
     s.listen(10)
-    connection, address = s.accept()
     try:
         while True:
             text = connection.recv(4096).decode()

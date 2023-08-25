@@ -1,7 +1,9 @@
+from enum import Enum
+
 from connect.Socket import accept_data
 from Middleware.operate import Operator
 
-from Database import Database_table
+from Database import Database_table, Filed, FiledType
 
 
 class MainClass:
