@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from Database.Date_base import Database_table, FiledType
+from Database.Date_base import Database_table, Filed, FiledType
 
 
 class Operator:
@@ -17,6 +17,33 @@ class Operator:
             return FiledType.DATE
         else:
             return FiledType.TEXT
+
+    @classmethod
+    def judge(cls, item: str) -> FiledType:
+        if item == "INT":
+            return FiledType.INT
+        elif item == "BOOLEAN":
+            return FiledType.BOOLEAN
+        elif item == "FLOAT":
+            return FiledType.FLOAT
+        elif item == "DATE":
+            return FiledType.DATE
+        else:
+            return FiledType.TEXT
+
+    @classmethod
+    def SQL_add_table(cls, SQL: str, dat: Database_table) -> None:
+        pattern = r"^CREATE TABLE (\w+) \((.+)\);?$"
+        match = re.match(pattern, SQL, re.IGNORECASE)
+        if match:
+            table_name = match.group(1)
+            column_info = match.group(2)
+            column_pattern = r"(\w+) (\w+)(?:\((\d+)\))?(\s+\w+)?(,\s+|$)"
+            columns = re.findall(column_pattern, column_info)
+            Fileds: list[Filed] = []
+            for column in columns:
+                Fileds.append(Filed(column[0], cls.judge(column[1])))
+            dat.add_table(table_name, Fileds)
 
     @classmethod
     def SQL_add(cls, SQL: str, dat: Database_table) -> None:

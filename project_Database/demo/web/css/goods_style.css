@@ -1,0 +1,125 @@
+/* General styles */
+body {
+	font-family: Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+header {
+	background-color: #4CAF50;
+	color: #fff;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between; /* 让商品列表和用户登录栏目分别靠左和靠右 */
+	align-items: center; /* 让用户登录栏目垂直居中 */
+}
+
+h1 {
+	margin: 0;
+	font-size: 36px;
+	font-weight: bold;
+}
+
+/* User login styles */
+.user-login {
+	display: flex;
+	align-items: center;
+}
+
+.username {
+	font-weight: bold;
+	margin: 0 10px;
+}
+
+.logout-button {
+	background-color: #f44336;
+	border: none;
+	border-radius: 3px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 8px 10px;
+	transition: background-color 0.3s ease;
+	text-decoration: none;
+}
+
+.logout-button:hover {
+	background-color: #d32f2f;
+}
+
+/* Product list styles */
+.product-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.product-item {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-sizing: border-box;
+	margin-bottom: 20px;
+	overflow: hidden;
+	width: calc(33.33% - 20px);
+	margin-right: 20px;
+}
+
+.product-item:nth-child(3n) {
+	margin-right: 0;
+}
+
+.product-image {
+	height: 200px;
+	overflow: hidden;
+}
+
+.product-image img {
+	width: 100%;
+}
+
+.product-description {
+	padding: 20px;
+}
+
+.product-description h2 {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.product-description p {
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.product-price {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.product-button {
+	background-color: #4CAF50;
+	border: none;
+	border-radius: 3px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 10px;
+	transition: background-color 0.3s ease;
+}
+
+.product-button:hover {
+	background-color: #3e8e41;
+}
