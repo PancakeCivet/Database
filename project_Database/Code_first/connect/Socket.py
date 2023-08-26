@@ -4,8 +4,9 @@ import socket
 from pathlib import Path
 from typing import Any
 
-from Database import Database_table, FiledType
 from Middleware import Operator
+
+from Database import Database_table, FiledType
 
 
 def accept_data(database: Database_table) -> None:
@@ -14,11 +15,14 @@ def accept_data(database: Database_table) -> None:
     receiver_port = 12345
     s.bind((receiver_ip, receiver_port))
     s.listen(10)
+    connection, address = s.accept()
     try:
         while True:
-            text = connection.recv(4096)
+            text = connection.recv(2048)
             if text == b"":
                 pass
+            if text == b"close":
+                s.close()
             else:
                 text = text.decode()
                 result = Operator.analysis(text, database)
@@ -26,3 +30,15 @@ def accept_data(database: Database_table) -> None:
                 connection.send(result_text.encode())
     except OSError as Ose:
         pass
+
+
+"""
+            if text == b"":
+                s.close()
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                receiver_ip = "127.0.0.1"
+                receiver_port = 12345
+                s.bind((receiver_ip, receiver_port))
+                s.listen(10)
+                connection, address = s.accept()
+"""

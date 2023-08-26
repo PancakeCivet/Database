@@ -220,8 +220,8 @@ class Operator:
             cls.SQL_updata(SQL, dat)
         elif ("SELECT" in sql) and ("ORDER BY" in sql):
             cls.SQL_sort(SQL, dat)
-        else:
-            print("Begain Wrong operate!!")
+        elif "CREATE TABLE" in sql:
+            cls.SQL_add_table(SQL, dat)
         database_temp = {}
         for table_name, table_struct in dat.Table_dict.items():
             database_temp[table_name] = table_struct.json()
