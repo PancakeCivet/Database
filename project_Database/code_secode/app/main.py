@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from Socket.socket_send import (
+    get_client,
+    get_seller,
     juage_seller,
     judge_client,
     register_client,
@@ -39,9 +41,33 @@ class User(BaseModel):
     """用户金额"""
 
 
+class user_register(BaseModel):
+    username: str
+    password: str
+    usertype: int
+    account: str
+
+
+class User_login(BaseModel):
+    account: str
+    password: str
+    usertype: bool
+
+
 @app.post("/login")
-async def login(user: User):
-    pass
+async def login(user: User_login):
+    account = user.account
+    password = user.password
+    usertype = user.usertype
+    if usertype == 1:
+        message = get_seller(account, password)
+    else:
+        message = get_client(account, password)
+    if message == {}:
+        return 1
+    if message["ban"] == True:
+        return 2
+    return 3 + usertype
 
 
 @app.post("/register")
@@ -49,17 +75,15 @@ async def register(user: User):
     username = user.username
     password = user.password
     usertype = user.usertype
-    ban = user.ban
     account = user.account
-    money = user.money
     if usertype == 1:
         if judge_client(account) == True:
-            register_client(username, password, usertype, ban, account, money)
+            register_client(username, password, usertype, False, account, 0)
             return True
         return False
     else:
         if juage_seller(account) == False:
-            register_seller(username, password, usertype, ban, account, money)
+            register_seller(username, password, usertype, False, account, 0)
             return True
         return False
 

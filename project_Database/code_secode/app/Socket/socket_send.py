@@ -1,5 +1,6 @@
 import json
 import socket
+from typing import Any
 
 receiver_ip = "127.0.0.1"
 receiver_port = 12345
@@ -56,7 +57,28 @@ def juage_seller(account: str) -> bool:
     for element in data["filed_row"]:
         if element["account"] == account:
             return False
-    return True
+    return True 
+
+def get_seller(account: str, password: str) -> dict[str, Any]:
+    str_ = f"SELECT * From seller"
+    s.sendall(str_.encode())
+    data = s.recv(1024).decode()
+    data = json.loads(data)
+    for element in data["filed_row"]:
+        if element["account"] == account and element["password"] == password:
+            return element
+    return {}
+
+
+def get_client(account: str, password: str) -> dict[str, Any]:
+    str_ = f"SELECT * From client"
+    s.sendall(str_.encode())
+    data = s.recv(1024).decode()
+    data = json.loads(data)
+    for element in data["filed_row"]:
+        if element["account"] == account and element["password"] == password:
+            return element
+    return {}
 
 
 """
